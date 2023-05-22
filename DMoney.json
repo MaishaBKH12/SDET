@@ -1,0 +1,27 @@
+{
+	"id": "036f94f2-71a7-4c16-9d60-c97d7ced3bd3",
+	"name": "DMoney",
+	"values": [
+		{
+			"key": "BaseUrl",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "Authorization",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userid",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2023-05-20T07:01:24.119Z",
+	"_postman_exported_using": "Postman/10.14.3"
+}
