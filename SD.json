@@ -1,0 +1,284 @@
+{
+	"info": {
+		"_postman_id": "df2496f6-250e-4dc6-86f9-9e7763c25553",
+		"name": "SDET practice Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26774872",
+		"_collection_link": "https://martian-water-577914.postman.co/workspace/b705d1a8-5bf2-4d28-8f86-ff92ba3b360f/collection/26774872-df2496f6-250e-4dc6-86f9-9e7763c25553?action=share&creator=26774872&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "UserLogin",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();\r",
+									"pm.collectionVariables.set(\"token\",jsonData.token)\r",
+									"\r",
+									"pm.test(\"Login Successfully 1\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var message=jsonData.message;\r",
+									"    console.log(\"message\");\r",
+									"    pm.expect(message).contains(\"Login successfully\")\r",
+									"});\r",
+									"pm.test(\"Login Successful 2\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Login successfully\");\r",
+									"});\r",
+									"pm.test(\"Role Exist\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.role).to.contain(\"Admin\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"salman@roadtocareer.net\",\r\n    \"password\":\"1234\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://dmoney.roadtocareer.net/user/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserList",
+			"item": [
+				{
+					"name": "GetList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"String Exist\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[1].name).to.eql(\"Laura McKenzie\");\r",
+									"});\r",
+									"pm.test(\"Number exist\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[0].phone_number).to.contain(01686606909);\r",
+									"});\r",
+									"pm.test(\"email exist\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[2].email).to.eql(\"Cathryn.Schuster@yahoo.com\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 3000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseurl}}/user/list"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Search",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseurl}}/user/search/id/9652"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create User",
+			"item": [
+				{
+					"name": "Create new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.collectionVariables.set(\"userId\",jsonData.user.id)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var prefix=\"0180\";\r",
+									"var nid=\"8790\";\r",
+									"var randomNumber=_.random(1000000,9999999)\r",
+									"var user_phone_number=prefix+randomNumber;\r",
+									"var nid_number=nid+randomNumber;\r",
+									"pm.collectionVariables.set(\"phone_number\", user_phone_number);\r",
+									"pm.collectionVariables.set(\"NID_Number\", nid_number);\r",
+									"console.log(user_phone_number);\r",
+									"console.log(nid_number);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"{{$randomFullName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"1234\",\r\n    \"phone_number\":\"{{phone_number}}\",\r\n    \"nid\":\"{{NID_Number}}\",\r\n    \"role\":\"Customer\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseurl}}/user/create"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Update",
+			"item": [
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"{{$randomFullName}}\",\r\n    \"email\":\"Hellis_Luboz5@yahoo.com\",\r\n    \"password\":\"1234\",\r\n    \"phone_number\":\"01234543212\",\r\n    \"nid\":\"87565210098\",\r\n    \"role\":\"Customer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseurl}}/user/update/{{userId}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete User",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhbG1hbkByb2FkdG9jYXJlZXIubmV0IiwicGFzc3dvcmQiOiIxMjM0IiwiaWF0IjoxNjg0NTkzNTA2LCJleHAiOjE2ODQ1OTUzMDZ9.mGfjh6BORgwmZA4BaAx94r5R6WF2e1h8P9dqpnTFIDQ"
+		},
+		{
+			"key": "baseurl",
+			"value": "http://dmoney.roadtocareer.net",
+			"type": "string"
+		},
+		{
+			"key": "phone_number",
+			"value": "01809271770"
+		},
+		{
+			"key": "NID_Number",
+			"value": "87909271770"
+		},
+		{
+			"key": "userId",
+			"value": 11797
+		}
+	]
+}
